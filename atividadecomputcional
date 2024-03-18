@@ -66,6 +66,10 @@ porcent2 = round(contagem2/sum(contagem2)*100,2)
 rotulo2=paste(nomes2," (",porcent2,"%",")",sep="")
 pie(table(Lucy$SPAM),labels=rotulo2, main="SPAM", col=c("#003154","#dd4a37"))
 
+q1 = ggplot(Level, Income, data= Lucy, geom= c("boxplot"))
+
+library(ggplot)
+
 
 attach(Lucy)
 total= function(x){length(x)*mean(x)}
@@ -136,8 +140,8 @@ SPAM.mo
 ######Mediana
 median(Lucy$Income)
 
-
-	
+#######Medida de Assimetria
+ASS= 3*(mean(Lucy$Income)-median(Lucy$Income))/sd(Lucy$Income);ASS	
 
 #####Questão 02
 
@@ -160,11 +164,14 @@ HT = (1/0.2)*sum(datalucy$Income);HT
 var_estimadaHT=(1/0.2)*((1/0.2)-1)*sum((data$Income)^2);var_estimadaHT
 
 ########Questão 03
+
 ######Tamanho amostral
 set.seed(13032024)
 data(Lucy)
+
 ####tamanho da amostra
 N <- dim(Lucy);N
+
 #####Amostra
 sam <- S.BE(2396, 0.2);sam 
 datalucy <- Lucy[sam,]; datalucy
@@ -186,60 +193,90 @@ name(Lucy)
 tabela.level= table(Lucy$Level);tabela.level
 
 set.seed(13032024)
-####tamanho da amostra
-N= 83;N ###Populaçao
-pi= 0.2;pi#####prob
-Tamanho_amostra1= N*pi;Tamanho_amostra1
 
 ####pi1 = 0.20 para a categoria Big.#####################
-
+NBig= filter(Lucy,Level == "Big");NBig
+pi1= 0.2
+dim(NBig)
 amostra1 <- S.BE(83, 0.2);amostra1
-data1 <- Lucy[amostra1,]; data1 
+data1 <- NBig[amostra1,]; data1 #########amostra selecionada
 dim(data1)
-E.BE(data1$Level,0.2)
+E.BE(data1$Income,0.2)
 
 #####π-estimador de total
-HT = (1/0.2)*sum(data1$Level);HT
+HT = (1/0.2)*sum(data1$Income);HT
 
- ##### variância estimada 
+##### variância estimada 
 
-var_estimadaHT=(1/0.2)*((1/0.2)-1)*sum((data1$Level)^2);var_estimadaHT
+var_estimadaHT=(1/0.2)*((1/0.2)-1)*sum((data1$Income)^2);var_estimadaHT
+
+####tamanho da amostra esperado
+N= 83;N ###Populaçao
+pi1= 0.2;pi1#####prob
+Tamanho_amostra1= N*pi1;Tamanho_amostra1
 
 #####pi2 = 0.30 para a categoria Medium.##############
+set.seed(13032024)
 
-####tamanho da amostra
-N= 737;N ###Populaçao
-pi= 0.3;pi#####prob
-Tamanho_amostra2= N*pi;Tamanho_amostra2
-
+NMedium= filter(Lucy,Level == "Medium");NMedium
+pi2= 0.3
+dim(NMedium)
 
 amostra2 <- S.BE(737, 0.3);amostra2 
-data2 <- Lucy[amostra2,]; data2 
+data2 <- NMedium[amostra2,]; data2 #########amostra selecionada
 dim(data2)
-E.BE(data2$Level,0.3)
+E.BE(data2$Income,0.3)
 
 #####π-estimador de total
-HT = (1/0.3)*sum(data2$Level);HT
+HT = (1/0.3)*sum(data2$Income);HT
 
 ##### variância estimada 
 
-var_estimadaHT=(1/0.3)*((1/0.3)-1)*sum((data2$Level)^2);var_estimadaHT
+var_estimadaHT=(1/0.3)*((1/0.3)-1)*sum((data2$Income)^2);var_estimadaHT
+
+
+####tamanho da amostra esperado
+N= 737;N ###Populaçao
+pi2= 0.3;pi2#####prob
+Tamanho_amostra2= N*pi2;Tamanho_amostra2 
+
 
 ######pi3 = 0.25 para a categoria Small.################
-####tamanho da amostra
-N= 1576;N ###Populaçao
-pi= 0.25;pi#####prob
-Tamanho_amostra3= N*pi;Tamanho_amostra3
-
+set.seed(13032024)
+NSmall= filter(Lucy,Level == "Small");NSmall
+pi3= 0.3
+dim(NSmall)
 
 amostra3 <- S.BE(1576, 0.25);amostra3 
-data3 <- Lucy[amostra3,]; data3 
+data3 <- NSmall[amostra3,]; data3 #########amostra selecionada
 dim(data3)
 
-E.BE(data3$Level,0.25)
+E.BE(data3$Income,0.25)
 #####π-estimador de total
-HT = (1/0.25)*sum(data3$Level);HT
+HT = (1/0.25)*sum(data3$Income);HT
 
 ##### variância estimada 
 
-var_estimadaHT=(1/0.25)*((1/0.25)-1)*sum((data3$Level)^2);var_estimadaHT
+var_estimadaHT=(1/0.25)*((1/0.25)-1)*sum((data3$Income)^2);var_estimadaHT
+
+####tamanho da amostra esperado
+N= 1576;N ###Populaçao
+pi3= 0.25;pi3#####prob
+Tamanho_amostra3= N*pi3;Tamanho_amostra3
+
+#### estimativa para o total de população em geral
+#### e sua variância estimada
+
+####Tamanho amostral
+Ntot= 2396
+Ens= 631.7
+pitotal=Ens/Ntot;pitotal
+#####π-estimador de total geral
+HT = (1/pitotal)*sum(data2$Income,data2$Income,data2$Income);HT
+
+##### variância estimada 
+
+var_estimadaHT=(1/pitotal)*((1/pitotal)-1)*sum((data1$Income)^2,(data2$Income)^2,
+                                         (data3$Income)^2);var_estimadaHT
+
+
