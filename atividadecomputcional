@@ -1,64 +1,245 @@
+#############Atividade comptacional 1######
+########## Técnicas de amostragem
 ######Francisca cíntia de sousa Barros
+####### matricula:408417
+
 
 install.packages('TeachingSampling')
 library(TeachingSampling) 
 
-
-###Questão 01
-#####análise descritiva das variáveis:
 
 data(Lucy)
 names(Lucy)
 head(Lucy)
 dim(Lucy)
 summary(Lucy)
-
 Lucy[c(3:5,8)]
 length(Lucy)
 
-p= Income;p
 
-sx= sum(p);sx 
-mx= mean(p); mx
-sx2= sum(p^2);sx2
-sxx= sum((p- mx)^2);sxx
-espx2= sum(p^2);espx2
-espx_2= sum(p)^2;espx_2
-
-######Gráficos
+###Questão 01
+#####análise descritiva das variáveis: Level, Zone, Income (Renda) e SPAM.
 
 #######Level
 tabela.level= table(Lucy$Level);tabela.level
-plot(tabela.level)
-plot(as.factor(tabela.level))
-barplot(tabela.level,col="red")
 
 ######Zone
 tabela.zone= table(Lucy$Zone);tabela.zone
-plot(tabela.zone)
-plot(as.factor(tabela.zone))
-barplot(tabela.zone,col="blue")
-
-
+ 
 #####Income
 tabela.income= table(Lucy$Income);tabela.income
-plot(tabela.income)
-plot(as.factor(tabela.income))
-barplot(tabela.income,col="violet")
-
-install.packages("ggplot2")
-library(ggplot2)
-
-ggplot(Lucy, aes(x=Level, y=SPAM, )+
-  geom_boxplot() + 
-  ggtitle('Nível')
-
+summary(Lucy$Income)  
 
 #####SPAM
 tabela.spam= table(Lucy$SPAM);tabela.spam
+
+
+######Graficos
+
+#######Level
+plot(tabela.level)
+barplot(tabela.level,col=c("orange", "blue",'green'))
+plot(Lucy$Level, Lucy$Zone, main = "Zone x Level", ylab = "Zona", xlab = "Nível")
+plot(Lucy$Level, Lucy$Income, main = "Level x Income", ylab = "Renda", xlab = "Nível",
+     col=c("red", "blue", "green"))
+
+######Zone
+plot(tabela.zone)
+barplot(tabela.zone,col="blue")
+boxplot(tabela.zone,col="pink")
+plot(Lucy$Zone, Lucy$Income, main = "Zone x Income", ylab = "Renda", xlab = "Zona",
+     col=c("red", "violet", "green"))
+pie()
+#####Income
+plot(tabela.income)
+barplot(tabela.income,col="violet")
+plot(as.factor(tabela.income))
+
+#####SPAM
 plot(tabela.spam)
-plot(as.factor(tabela.spam))
 barplot(tabela.spam,col="gray")
 
+
+contagem2 = table(Lucy$SPAM)
+nomes2 = levels(Lucy$SPAM)
+porcent2 = round(contagem2/sum(contagem2)*100,2)
+rotulo2=paste(nomes2," (",porcent2,"%",")",sep="")
+pie(table(Lucy$SPAM),labels=rotulo2, main="SPAM", col=c("#003154","#dd4a37"))
+
+
+attach(Lucy)
+total= function(x){length(x)*mean(x)}
+total(Lucy$Income)
+
+
+sx= sum(Lucy$Income);sx 
+mx= mean(Lucy$Income); mx
+sx2= sum(Lucy$Income^2);sx2
+sxx= sum((Lucy$Income- mx)^2);sxx
+espx2= sum(Lucy$Income^2);espx2
+espx_2= sum(Lucy$Income)^2;espx_2
+
+#######Medidas de Dispersão	
+
+###Desvio Padrão
+sd(Lucy$Income)
+###Variância
+var(Lucy$Income)
+###Coeficiente de Variação - CV (%)
+CV.Income<-sd(Lucy$Income)/mean(Lucy$Income)*100
+CV.Income
+###Amplitude Total
+range(Lucy$Income)
+##ordenar
+sort(Lucy$Income)
+#minimo e maximo
+min(Lucy$Income)
+max(Lucy$Income)
+
+###Desvio Médio
+Desvio_Médio = sum(abs(Lucy$Income-mean(Lucy$Income)))
+Desvio_Médio
+###Medidas de Assimetria
+quantile(Lucy$Income, probs=seq(0,1,.25))
+
+boxplot(Lucy$Income, staplewex = 1,horizontal = TRUE)
+text(x = boxplot.stats(Lucy$Income)$stats[c(2,3,4)], 
+     labels = boxplot.stats(Lucy$Income)$stats[c(2,3,4)], y = 1.25)
+
+length(Lucy$Income)
+boxplot.stats(Lucy$Income)$stats 
+prop.table(Lucy$Income)
+p<-prop.table(Lucy$Income)*100
+p
+
+
+#######Medidas de Tendência Central	
+
+###Média 
+mean(Lucy$Income)
+
+ 
+#### Moda 
+
+Level.mo = names(tabela.level)[which.max(tabela.level)] 
+Level.mo 
+
+Zone.mo = names(tabela.zone)[which.max(tabela.zone)] 
+Zone.mo 
+
+Renda.mo = names(tabela.income)[which.max(tabela.income)] 
+Renda.mo
+
+SPAM.mo = names(tabela.spam)[which.max(tabela.spam)] 
+SPAM.mo
+
+######Mediana
+median(Lucy$Income)
+
+
+	
+
 #####Questão 02
+
 set.seed(13032024)
+data(Lucy)
+####tamanho da amostra
+N <- dim(Lucy);N
+#####Amostra
+sam <- S.BE(2396, 0.2);sam 
+datalucy <- Lucy[sam,]; datalucy
+dim(datalucy)
+
+E.BE(datalucy$Income,0.2)
+
+#####π-estimador de total
+HT = (1/0.2)*sum(datalucy$Income);HT
+
+##### variância estimada para a variável Income
+
+var_estimadaHT=(1/0.2)*((1/0.2)-1)*sum((data$Income)^2);var_estimadaHT
+
+########Questão 03
+######Tamanho amostral
+set.seed(13032024)
+data(Lucy)
+####tamanho da amostra
+N <- dim(Lucy);N
+#####Amostra
+sam <- S.BE(2396, 0.2);sam 
+datalucy <- Lucy[sam,]; datalucy
+dim(datalucy)
+
+############Tamanho amostral esperado
+
+N= 2396;N ###Populaçao
+pi= 0.2;pi#####prob
+Tamanho_amostra= N*pi;Tamanho_amostra
+
+
+########Questão 04
+####Obtenha uma amostra mediante uma amostragem de Bernoulli
+
+data(Lucy)
+name(Lucy)
+#######Level
+tabela.level= table(Lucy$Level);tabela.level
+
+set.seed(13032024)
+####tamanho da amostra
+N= 83;N ###Populaçao
+pi= 0.2;pi#####prob
+Tamanho_amostra1= N*pi;Tamanho_amostra1
+
+####pi1 = 0.20 para a categoria Big.#####################
+
+amostra1 <- S.BE(83, 0.2);amostra1
+data1 <- Lucy[amostra1,]; data1 
+dim(data1)
+E.BE(data1$Level,0.2)
+
+#####π-estimador de total
+HT = (1/0.2)*sum(data1$Level);HT
+
+ ##### variância estimada 
+
+var_estimadaHT=(1/0.2)*((1/0.2)-1)*sum((data1$Level)^2);var_estimadaHT
+
+#####pi2 = 0.30 para a categoria Medium.##############
+
+####tamanho da amostra
+N= 737;N ###Populaçao
+pi= 0.3;pi#####prob
+Tamanho_amostra2= N*pi;Tamanho_amostra2
+
+
+amostra2 <- S.BE(737, 0.3);amostra2 
+data2 <- Lucy[amostra2,]; data2 
+dim(data2)
+E.BE(data2$Level,0.3)
+
+#####π-estimador de total
+HT = (1/0.3)*sum(data2$Level);HT
+
+##### variância estimada 
+
+var_estimadaHT=(1/0.3)*((1/0.3)-1)*sum((data2$Level)^2);var_estimadaHT
+
+######pi3 = 0.25 para a categoria Small.################
+####tamanho da amostra
+N= 1576;N ###Populaçao
+pi= 0.25;pi#####prob
+Tamanho_amostra3= N*pi;Tamanho_amostra3
+
+
+amostra3 <- S.BE(1576, 0.25);amostra3 
+data3 <- Lucy[amostra3,]; data3 
+dim(data3)
+
+E.BE(data3$Level,0.25)
+#####π-estimador de total
+HT = (1/0.25)*sum(data3$Level);HT
+
+##### variância estimada 
+
+var_estimadaHT=(1/0.25)*((1/0.25)-1)*sum((data3$Level)^2);var_estimadaHT
