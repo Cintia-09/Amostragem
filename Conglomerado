@@ -1,0 +1,79 @@
+######ATIVIDADE COMPUTACIOANAL - CONGLOMERADO
+####fRANCISCA CÍNTIA DE SOUSA BARROS
+####12/08/2024
+
+
+install.packages("dplyr")
+install.packages("sampling")
+install.packages("TeachingSampling")
+install.packages("magrittr")
+library("dplyr")
+library("sampling")
+library("TeachingSampling")
+library("magrittr")
+
+
+dados= data.frame(Dados_Estratificado)
+head(dados)
+
+#QUESTÃO 01
+###minimo inteiro que represente 10% do tamanho do estrato
+N= dados%>%group_by(Estrato)%>%summarise(n=n())
+N["10%"]= ceiling(N$n*0.1)
+N
+
+###Filtrar estratos
+summary(as.factor(dados$Estrato))
+dados1= dados[dados$Estrato==1,];dados1
+dados2= dados[dados$Estrato==2,];dados2
+dados3= dados[dados$Estrato==3,];dados3
+dados4= dados[dados$Estrato==4,];dados4
+
+
+# Realizar a amostragem conglomerado
+
+##AASc
+set.seed(1612) # Definir a semente 
+sam <- S.WR(4, 2);sam
+
+####EStimação
+E.WR(4, 2,c(sum(dados1$yk),sum(dados2$yk)))
+
+
+
+
+###AASs
+set.seed(1612) # Definir a semente 
+sam <- S.SI(4, 2);sam
+
+
+####EStimação
+E.SI(4, 2,c(sum(dados3$yk),sum(dados4$yk)))
+
+
+#####Bernoulli
+set.seed(1612) # Definir a semente 
+sam <-S.BE(4,0.3);sam
+
+####EStimação
+E.BE((sum(dados3$yk)),0.3)
+
+
+
+####Poisson
+set.seed(1612) # Definir a semente 
+pk = c(0.25,0.30,0.25,0.40);pk
+sam <-S.PO(4,pk);sam
+
+
+##Estimaçao
+E.PO(c(sum(dados2$yk),sum(dados3$yk)),pk)
+
+####PPT
+
+set.seed(1612) # Definir a semente 
+sam <- S.PPS(2,c(sum(dados1$xk),sum(dados2$xk),sum(dados3$xk),sum(dados4$xk)));
+sam
+
+####estimaçao
+E.PPS(c(sum(dados4$yk),sum(dados4$yk)),c(0.3797871,0.3797871))
