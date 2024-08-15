@@ -1,0 +1,173 @@
+# Dados iniciais
+N <- 3400  # Número total de funcionários
+n <- 120  # Tamanho total da amostra
+setores <- c("A", "B", "C", "D")
+N_h <- c(300, 950, 1450, 700)  # Número de funcionários por setor
+H_h <- c(500, 450, 300, 400)  # Número médio de horas trabalhadas por setor
+
+# Alocação proporcional ao tamanho do estrato
+n_h_tamanho <- round(n * N_h / N)
+n_h_tamanho
+# Alocação proporcional ao total de horas trabalhadas por estrato
+total_horas <- sum(N_h * H_h)
+total_horas
+n_h_horas <- round(n * (N_h * H_h) / total_horas)
+n_h_horas
+
+# Dados dos salários
+salarios <- data.frame(
+  Setores = c("A", "B", "C", "D"),
+  Sum_yk = c(34000, 46000, 37600, 28500),
+  Sum_yk2 = c(10800000, 96000000, 100380000, 97075000)
+)
+
+# Função para calcular a média e o coeficiente de variação estimado
+calcula_estatisticas <- function(n_h) {
+  Y_h_est <- salarios$Sum_yk / n_h
+  S_h2 <- (salarios$Sum_yk2 - (salarios$Sum_yk^2 / n_h)) / (n_h - 1)
+  Y_est <- sum(N_h * Y_h_est) / N
+  V_Y_est <- sum((N_h^2 / n_h) * S_h2) / N^2
+  CV_Y_est <- sqrt(V_Y_est) / Y_est
+  return(list(Y_est = Y_est, CV_Y_est = CV_Y_est))
+}
+
+# Calcular para alocação proporcional ao tamanho do estrato
+estatisticas_tamanho <- calcula_estatisticas(n_h_tamanho)
+estatisticas_tamanho
+
+# Calcular para alocação proporcional ao total de horas trabalhadas
+estatisticas_horas <- calcula_estatisticas(n_h_horas)
+
+# Resultados
+lista_resultados <- list(
+  "Tamanho Proporcional ao Número de Funcionários" = list(
+    "Tamanhos Amostrais" = n_h_tamanho,
+    "Salário Médio Estimado" = estatisticas_tamanho$Y_est,
+    "Coeficiente de Variação" = estatisticas_tamanho$CV_Y_est
+  ),
+  "Proporcional ao Total de Horas Trabalhadas" = list(
+    "Tamanhos Amostrais" = n_h_horas,
+    "Salário Médio Estimado" = estatisticas_horas$Y_est,
+    "Coeficiente de Variação" = estatisticas_horas$CV_Y_est
+  )
+)
+
+lista_resultados
+# Função para calcular a média e a variância geral
+calcula_estatisticas_geral <- function(n_h, salarios, N_h, N) {
+  Y_h_est = salarios$Sum_yk / n_h
+  S_h2 = (salarios$Sum_yk2 - (salarios$Sum_yk^2 / n_h)) / (n_h - 1)
+  Y_est = sum(N_h * Y_h_est) / N
+  V_Y_est = sum((N_h^2 / n_h) * S_h2) / N^2
+  CV_Y_est = sqrt(V_Y_est) / Y_est
+  return(list(Y_est = Y_est, CV_Y_est = CV_Y_est, Y_h_est = Y_h_est, S_h2 = S_h2))
+}
+
+# Calcular para alocação proporcional ao tamanho do estrato
+estatisticas_tamanho_geral <- calcula_estatisticas_geral(n_h_tamanho, salarios, N_h, N)
+
+# Calcular para alocação proporcional ao total de horas trabalhadas
+estatisticas_horas_geral <- calcula_estatisticas_geral(n_h_horas, salarios, N_h, N)
+
+# Resultados
+lista_resultados_geral <- list(
+  "Tamanho Proporcional ao Número de Funcionários" = estatisticas_tamanho_geral,
+  "Proporcional ao Total de Horas Trabalhadas" = estatisticas_horas_geral
+)
+
+lista_resultados_geral
+# Função para calcular a média e a variância geral
+calcula_estatisticas_geral <- function(n_h, salarios, N_h, N) {
+  Y_h_est = salarios$Sum_yk / n_h
+  S_h2 = (salarios$Sum_yk2 - (salarios$Sum_yk^2 / n_h)) / (n_h - 1)
+  Y_est = sum(N_h * Y_h_est) / N
+  V_Y_est = sum((N_h^2 / n_h) * S_h2) / N^2
+  CV_Y_est = sqrt(V_Y_est) / Y_est
+  return(list(Y_est = Y_est, CV_Y_est = CV_Y_est, Y_h_est = Y_h_est, S_h2 = S_h2))
+}
+
+# Calcular para alocação proporcional ao tamanho do estrato
+estatisticas_tamanho_geral <- calcula_estatisticas_geral(n_h_tamanho, salarios, N_h, N)
+
+# Calcular para alocação proporcional ao total de horas trabalhadas
+estatisticas_horas_geral <- calcula_estatisticas_geral(n_h_horas, salarios, N_h, N)
+
+# Resultados
+lista_resultados_geral <- list(
+  "Tamanho Proporcional ao Número de Funcionários" = estatisticas_tamanho_geral,
+  "Proporcional ao Total de Horas Trabalhadas" = estatisticas_horas_geral
+)
+
+lista_resultados_geral
+# Função para calcular a média e a variância geral
+calcula_estatisticas_geral <- function(n_h, salarios, N_h, N) {
+  Y_h_est = salarios$Sum_yk / n_h
+  S_h2 = (salarios$Sum_yk2 - (salarios$Sum_yk^2 / n_h)) / (n_h - 1)
+  Y_est = sum(N_h * Y_h_est) / N
+  V_Y_est = sum((N_h^2 / n_h) * S_h2) / N^2
+  CV_Y_est = sqrt(V_Y_est) / Y_est
+  return(list(Y_est = Y_est, CV_Y_est = CV_Y_est, Y_h_est = Y_h_est, S_h2 = S_h2))
+}
+
+# Calcular para alocação proporcional ao tamanho do estrato
+estatisticas_tamanho_geral <- calcula_estatisticas_geral(n_h_tamanho, salarios, N_h, N)
+
+# Calcular para alocação proporcional ao total de horas trabalhadas
+estatisticas_horas_geral <- calcula_estatisticas_geral(n_h_horas, salarios, N_h, N)
+
+# Resultados
+lista_resultados_geral <- list(
+  "Tamanho Proporcional ao Número de Funcionários" = estatisticas_tamanho_geral,
+  "Proporcional ao Total de Horas Trabalhadas" = estatisticas_horas_geral
+)
+
+lista_resultados_geral
+# Função para calcular a média e a variância geral
+calcula_estatisticas_geral <- function(n_h, salarios, N_h, N) {
+  Y_h_est = salarios$Sum_yk / n_h
+  S_h2 = (salarios$Sum_yk2 - (salarios$Sum_yk^2 / n_h)) / (n_h - 1)
+  Y_est = sum(N_h * Y_h_est) / N
+  V_Y_est = sum((N_h^2 / n_h) * S_h2) / N^2
+  CV_Y_est = sqrt(V_Y_est) / Y_est
+  return(list(Y_est = Y_est, CV_Y_est = CV_Y_est, Y_h_est = Y_h_est, S_h2 = S_h2))
+}
+
+# Calcular para alocação proporcional ao tamanho do estrato
+estatisticas_tamanho_geral <- calcula_estatisticas_geral(n_h_tamanho, salarios, N_h, N)
+
+# Calcular para alocação proporcional ao total de horas trabalhadas
+estatisticas_horas_geral <- calcula_estatisticas_geral(n_h_horas, salarios, N_h, N)
+
+# Resultados
+lista_resultados_geral <- list(
+  "Tamanho Proporcional ao Número de Funcionários" = estatisticas_tamanho_geral,
+  "Proporcional ao Total de Horas Trabalhadas" = estatisticas_horas_geral
+)
+
+lista_resultados_geral
+
+
+# Função para calcular a média e a variância geral
+calcula_estatisticas_geral <- function(n_h, salarios, N_h, N) {
+  Y_h_est = salarios$Sum_yk / n_h
+  S_h2 = (salarios$Sum_yk2 - (salarios$Sum_yk^2 / n_h)) / (n_h - 1)
+  Y_est = sum(N_h * Y_h_est) / N
+  V_Y_est = sum((N_h^2 / n_h) * S_h2) / N^2
+  CV_Y_est = sqrt(V_Y_est) / Y_est
+  return(list(Y_est = Y_est, CV_Y_est = CV_Y_est, Y_h_est = Y_h_est, S_h2 = S_h2))
+}
+
+# Calcular para alocação proporcional ao tamanho do estrato
+estatisticas_tamanho_geral <- calcula_estatisticas_geral(n_h_tamanho, salarios, N_h, N)
+
+# Calcular para alocação proporcional ao total de horas trabalhadas
+estatisticas_horas_geral <- calcula_estatisticas_geral(n_h_horas, salarios, N_h, N)
+
+# Resultados
+lista_resultados_geral <- list(
+  "Tamanho Proporcional ao Número de Funcionários" = estatisticas_tamanho_geral,
+  "Proporcional ao Total de Horas Trabalhadas" = estatisticas_horas_geral
+)
+
+lista_resultados_geral
+
