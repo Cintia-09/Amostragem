@@ -1,0 +1,456 @@
+###Exercício amostragem estratificada
+
+set.seed(1612)
+
+
+install.packages("dplyr")
+install.packages("sampling")
+install.packages("TeachingSampling")
+install.packages("magrittr")
+library("dplyr")
+library("sampling")
+library("TeachingSampling")
+library("magrittr")
+
+
+
+dados= data.frame(Dados_Estratificado)
+head(dados)
+
+#QUESTÃO 01
+###minimo inteiro que represente 10% do tamanho do estrato
+N= dados%>%group_by(Estrato)%>%summarise(n=n())
+N["10%"]= ceiling(N$n*0.1)
+N
+
+# Realizar a amostragem estratificada
+set.seed(1612) # Definir a semente 
+sam <- S.STSI(dados$Estrato, N$n, N$`10%`);sam
+amostra <- dados[sam, ];amostra
+
+###Filtrar estratos
+summary(as.factor(dados$Estrato))
+Est1= dados[dados$Estrato==1,];Est1
+Est2= dados[dados$Estrato==2,];Est2
+Est3= dados[dados$Estrato==3,];Est3
+Est4= dados[dados$Estrato==4,];Est4
+
+###Estrato 1
+set.seed(1612)
+N1= length(Est1$Estrato);N1
+N1*0.1
+n1= 3;n1
+A1= S.SI(N=N1,n=n1);A1
+A1[A1 != 0]
+# Criando um data frame com os novos dados
+dados1 <- data.frame(
+  Estrato = c(1, 1, 1),
+  k = c(6, 7, 10),
+  yk = c(22, 26, 40),
+  xk = c(41.98452, 51.09727, 79.71031)
+)
+
+# Exibindo o data frame dos novos dados
+print(dados1)
+
+
+E1= E.SI(N= N1, n=n1,Est1$yk[A1]);E1
+###media e variancia estimada
+c(E1[1,2]/N1, E1[2,2]^2/N1^2)
+
+###Estrato 2
+set.seed(1612)
+N2= length(Est2$Estrato);N2
+N2*0.1
+n2= 6;n2
+A2= S.SI(N=N2,n=n2);A2
+A2[A2 != 0]
+# Criando um data frame com os dados
+dados2 <- data.frame(
+  Estrato = c(2, 2, 2, 2, 2, 2),
+  k = c(6, 7, 10, 16, 35, 36),
+  yk = c(189, 156, 186, 172, 179, 182),
+  xk = c(375.5629, 311.7605, 371.7259, 343.8599, 356.9476, 361.3801)
+)
+
+# Exibindo o data frame
+print(dados2)
+
+E2= E.SI(N= N2, n=n2,Est2$yk[A2]);E2
+###media e variancia estimada
+c(E2[1,2]/N2, E2[2,2]^2/N2^2)
+
+###Estrato 3
+set.seed(1612)
+N3= length(Est3$Estrato);N3
+N3*0.1
+n3= 10;n3
+A3= S.SI(N=N3,n=n3);A3
+A3[A3 != 0]
+# Criando um data frame com os dados
+dados3 <- data.frame(
+  Estrato = c(3, 3, 3, 3, 3, 3, 3, 3, 3, 3),
+  k = c(6, 7, 10, 15, 16, 35, 36, 40, 75, 77),
+  yk = c(51, 52, 70, 54, 57, 56, 76, 64, 79, 58),
+  xk = c(101.2131, 101.2021, 139.7729, 105.1029, 111.5866, 110.5538, 149.5537, 126.5435, 157.5134, 115.4835)
+)
+
+# Exibindo o data frame
+print(dados3)
+
+E3= E.SI(N= N3, n=n3,Est3$yk[A3]);E3
+###media e variancia estimada
+c(E3[1,2]/N3, E3[2,2]^2/N3^2)
+
+###Estrato 4
+set.seed(1612)
+N4= length(Est4$Estrato);N4
+N4*0.1
+n4= 4;n4
+A4= S.SI(N=N4,n=n4);A4
+A4[A4 != 0]
+# Criando um data frame com os novos dados
+dados4 <- data.frame(
+  Estrato = c(4, 4, 4, 4),
+  k = c(6, 7, 10, 35),
+  yk = c(261, 272, 273, 276),
+  xk = c(521.9697, 543.0558, 543.3641, 549.2817)
+)
+
+# Exibindo o data frame dos novos dados
+print(dados4)
+
+E4= E.SI(N= N4, n=n4,Est4$yk[A4]);E4
+###media e variancia estimada
+c(E4[1,2]/N4, E4[2,2]^2/N4^2)
+
+###Total estimado
+t_Est = E1[1,2]+ E2[1,2]+ E3[1,2]+E4[1,2];t_Est
+
+
+##Variancia estimada
+
+Var_est= E1[2,2]^2+ E2[2,2]^2+ E3[2,2]^2+E4[2,2]^2;Var_est
+
+###cve
+cve= sqrt(Var_est)/t_Est
+cve
+
+###média estimada
+xbar= t_Est/227
+xbar
+
+
+##var média
+
+varest=Var_est/227^2
+varest
+
+
+##Questao 02
+
+###minimo inteiro que represente 10% do tamanho do estrato
+N= dados%>%group_by(Estrato)%>%summarise(n=n())
+N["10%"]= ceiling(N$n*0.1)
+N
+
+# Realizar a amostragem estratificada
+set.seed(1612) # Definir a semente 
+# Realizar a amostragem PPT para cada estrato
+ppt <- S.STPPS(dados$Estrato, dados$yk, N$`10%`)
+dim(dados)
+# Exibir a amostragem PPT
+ppt
+
+
+
+###Estrato 1
+set.seed(1612)
+N1= length(Est1$Estrato);N1
+N1*0.1
+n1= 3;n1
+
+
+PPT1= S.PPS(m=n1,Est1$xk);PPT1
+APPT1= PPT1[,1]
+APPT1
+pk <- PPT1[,2] 
+pk
+
+Ep1 = E.PPS(Est1$yk[PPT1[,1]],pk);Ep1
+c(Ep1[1,2]/N1, Ep1[2,2]^2/N1^2)
+vartp1 =  9.89438^2
+vartp1
+
+# Definir os dados como vetores
+estrato <- c(1, 1, 1)
+k <- c(27, 24, 28)
+yk <- c(34, 39, 53.29132)
+xk <- c(65.90939, 77.17211, 53.29132)
+pk <- c(0.03856933, 0.04516013, 0.03118540)
+
+# Criar o data frame
+tabela <- data.frame(
+  Estrato = estrato,
+  k = k,
+  yk = yk,
+  xk = xk,
+  pk = pk
+)
+
+# Exibir a tabela
+print(tabela)
+
+
+###Estrato 2
+set.seed(1612)
+N2= length(Est2$Estrato);N2
+N2*0.1
+n2= 6;n2
+
+
+PPT2= S.PPS(m=n2,Est2$xk);PPT2
+APPT2= PPT2[,1]
+APPT2
+pk <- PPT2[,2] 
+pk
+
+Ep2 = E.PPS(Est2$yk[PPT2[,1]],pk);Ep2
+c(Ep2[1,2]/N2, Ep2[2,2]^2/N2^2)
+vartp2 =  1.208e+01^2
+vartp2
+
+# Definir os dados como vetores
+estrato <- c(2, 2, 2, 2, 2, 2)
+k <- c(54, 49, 10, 23, 46, 3)
+yk <- c(166, 174, 186, 179, 176, 173)
+xk <- c(330.7127, 346.1195, 371.7259, 355.5326, 349.1693, 345.3938)
+pk <- c(0.01617631, 0.01692991, 0.01818241, 0.01739034, 0.01707909, 0.01689442)
+
+# Criar o data frame
+tabela2 <- data.frame(
+  Estrato = estrato,
+  k = k,
+  yk = yk,
+  xk = xk,
+  pk = pk
+)
+
+# Exibir a tabela
+print(tabela2)
+
+###Estrato 3
+set.seed(1612)
+N3= length(Est3$Estrato);N3
+N3*0.1
+n3= 10;n3
+
+
+PPT3= S.PPS(m=n3,Est3$xk);PPT3
+APPT3= PPT3[,1]
+APPT3
+pk <- PPT3[,2] 
+pk
+
+Ep3 = E.PPS(Est3$yk[PPT3[,1]],pk);Ep3
+c(Ep3[1,2]/N3, Ep3[2,2]^2/N3^2)
+vartp3 =  1.027e+01^2
+vartp3
+
+
+# Definir os dados como vetores
+estrato <- c(3, 3, 3, 3, 3, 3, 3, 3, 3, 3)
+k <- c(88, 80, 17, 37, 74, 4, 5, 98, 60, 3)
+yk <- c(73, 65, 50, 81, 71, 78, 52, 82, 59, 86)
+xk <- c(144.21747, 129.83493, 99.19254, 161.45760, 141.04754, 153.11033, 102.93322, 162.88648, 116.92664, 170.80318)
+pk <- c(0.010803448, 0.009726041, 0.007430594, 0.012094921, 0.010565986, 0.011469620, 0.007710812, 0.012201959, 0.008759070, 0.012795006)
+
+# Criar o data frame
+tabela3 <- data.frame(
+  Estrato = estrato,
+  k = k,
+  yk = yk,
+  xk = xk,
+  pk = pk
+)
+
+# Exibir a tabela
+print(tabela3)
+
+
+###Estrato 4
+set.seed(1612)
+N4= length(Est4$Estrato);N4
+N4*0.1
+n4= 4;n4
+
+
+PPT4= S.PPS(m=n4,Est4$xk);PPT4
+APPT4= PPT4[,1]
+APPT4
+pk <- PPT4[,2] 
+pk
+
+Ep4 = E.PPS(Est4$yk[PPT4[,1]],pk);Ep4
+
+
+c(Ep4[1,2]/N1, Ep4[2,2]^2/N4^2)
+vartp4 =  7.152e+00^2
+vartp4
+
+# Definir os dados como vetores
+estrato <- c(4, 4, 4, 4)
+k <- c(36, 33, 7, 15)
+yk <- c(272, 256, 272, 289)
+xk <- c(542.1863, 510.8216, 543.0558, 575.2763)
+pk <- c(0.02493977220, 0.02349704, 0.02497976, 0.02646186)
+
+# Criar o data frame
+tabela4 <- data.frame(
+  Estrato = estrato,
+  k = k,
+  yk = yk,
+  xk = xk,
+  pk = pk
+)
+
+# Exibir a tabela
+print(tabela4)
+
+numero <- 1.090e+04
+as.integer(numero)
+
+
+library(dplyr)
+
+# Filtrar dados com pk maior que 0.025
+tabela_filtrada <- tabela %>% filter(pk > 0.025)
+print(tabela_filtrada)
+
+library(ggplot2)
+
+# Criar um gráfico de dispersão de xk vs. yk
+ggplot(tabela, aes(x = xk, y = yk)) +
+  geom_point() +
+  labs(title = "Gráfico de Dispersão de xk vs yk",
+       x = "xk",
+       y = "yk")
+
+
+
+###Total estimado
+t_Estp = Ep1[1,2]+ Ep2[1,2]+ Ep3[1,2]+Ep4[1,2];t_Estp
+
+
+##Variancia estimada
+
+Var_estp= Ep1[2,2]^2+ Ep2[2,2]^2+ Ep3[2,2]^2+Ep4[2,2]^2;Var_estp
+
+###cve
+cve= sqrt(Var_estp)/t_Estp
+cve
+###média estimada
+xbar= t_Estp/227
+xbar
+
+
+##var média
+
+varest=Var_estp/227^2
+varest
+
+###Questão 03
+
+
+# Criar a tabela com o número de observações por estrato
+Na <- dados %>%
+  group_by(Estrato) %>%
+  summarise(n = n(),
+            total_x = sum(xk),
+            total_y = sum(yk),
+            sd_y = sd(yk))
+Na
+# Definir o tamanho da amostra total
+n_total <- 30
+
+# Alocação uniforme
+Na$uniforme <- n_total / nrow(N)
+Na$uniforme
+
+# Alocação proporcional ao tamanho do estrato
+Na$n
+sum(Na$n)
+Na$proporcional <- (Na$n / sum(Na$n)) * n_total
+Na$proporcional
+
+# Alocação proporcional ao total da variável x
+Na$total_x
+sum(Na$total_x)
+Na$proporcional_x <- (Na$total_x / sum(Na$total_x)) * n_total
+Na$proporcional_x 
+
+# Alocação de Neyman (usando a variável x)
+Na$n * Na$sd_y
+sum(Na$n * Na$sd_y)
+Na$neyman <- (Na$n * Na$sd_y / sum(Na$n * Na$sd_y)) * n_total
+Na$neyman 
+
+
+####Ajustado
+
+# Calcular as estatísticas por estrato
+Na <- dados %>%
+  group_by(Estrato) %>%
+  summarise(n = n(),
+            total_x = sum(xk),
+            total_y = sum(yk),
+            sd_y = sd(yk))
+Na
+# Tamanho da amostra total
+n_total <- 30
+n_total
+# Alocação uniforme
+Na$uniforme <- round(n_total / nrow(N))
+Na$uniforme
+# Alocação proporcional ao tamanho do estrato
+Na$n
+sum(Na$n)
+Na$proporcional <- round((Na$n / sum(Na$n)) * n_total)
+Na$proporcional
+# Alocação proporcional ao total da variável x
+Na$total_x
+sum(Na$total_x)
+sum(Na$total_x) * n_total
+Na$proporcional_x <- round((Na$total_x / sum(Na$total_x)) * n_total)
+Na$proporcional_x
+# Alocação de Neyman (usando a variável x)
+Na$n * Na$sd_y
+sum(Na$n * Na$sd_y)
+sum(Na$n * Na$sd_y) * n_total
+Na$neyman <- round((Na$n * Na$sd_y / sum(Na$n * Na$sd_y)) * n_total)
+Na$neyman 
+
+
+# Ajuste para garantir que o total de amostras não exceda 30
+ajuste <- function(alocacao) {
+  total_arredondado <- sum(alocacao)
+  if (total_arredondado > n_total) {
+    diferenca <- total_arredondado - n_total
+    # Ordena os estratos pelo valor arredondado e ajusta a maior quantidade
+    ajustado <- alocacao - sort(alocacao, decreasing = TRUE)[1:diferenca]
+  } else {
+    ajustado <- alocacao
+  }
+  return(ajustado)
+}
+
+# Ajustar os valores arredondados
+Na$uniforme <- ajuste(Na$uniforme);Na$uniforme
+Na$proporcional <- ajuste(Na$proporcional);Na$proporcional
+Na$proporcional_x <- ajuste(Na$proporcional_x);Na$proporcional_x
+Na$neyman <- ajuste(Na$neyman);Na$neyma
+
+# Exibir a tabela com os resultados
+print(Na)
+citation()
+citation(pack="TeachingSampling")
